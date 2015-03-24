@@ -59,3 +59,29 @@ function onMobFight(mob)
 	end
 
 end;
+
+-----------------------------------
+-- onMobDeath
+-----------------------------------
+
+function onMobDeath(mob,killer)	
+    		local X = mob:getXPos();
+		local Y = mob:getYPos();
+		local Z = mob:getZPos();
+
+    mob = mob:getID();
+    if (Jailer_of_Temperance_PH[mob] ~= nil) then
+
+        ToD = GetServerVariable("[POP]Jailer_of_Temperance");
+        if (ToD <= os.time(t) and GetMobAction(Jailer_of_Temperance) == 0) then
+            if (math.random((1),(5)) == 5) then
+                GetMobByID(Jailer_of_Temperance):setRespawnTime(GetMobRespawnTime(mob));
+                SetServerVariable("[PH]Jailer_of_Temperance", mob);
+				SpawnMob(16916814);
+				GetMobByID(16916814):setPos(X,Y,Z);
+				GetMobByID(16916814):setSpawn(X,Y,Z);
+                DeterMob(mob, true);
+            end
+        end
+    end  
+end;	
