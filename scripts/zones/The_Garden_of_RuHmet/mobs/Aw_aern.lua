@@ -1,26 +1,46 @@
------------------------------------
+-----------------------------------	
 -- Area: The Garden of Ru'Hmet
--- NPC:  Aw_aern PH (Ix'Aern DRK and DRG)
------------------------------------
-package.loaded["scripts/zones/The_Garden_of_RuHmet/TextIDs"] = nil;
------------------------------------
+-- MOB:  Aw'aern
+-- Note: Place Holder for Ix'aern (DRG)
+-----------------------------------	
 
-require("scripts/zones/The_Garden_of_RuHmet/TextIDs");
 require("scripts/zones/The_Garden_of_RuHmet/MobIDs");
-
------------------------------------
--- onMobSpawn Action
------------------------------------
-
-function onMobSpawn(mob)
 	
-end;
+-----------------------------------	
+-- onMobDeath	
+-----------------------------------	
+	
+function onMobDeath(mob,killer)	
+	local rand = math.random(1,2)
+	if (mob:getID() == 16920646 or mob:getID() == 16920647 or mob:getID() == 16920648) then
+		if (rand == 1) then
+			killer:setVar("animosity", os.time());
+			killer:messageSpecial(7723);
+		end
+	end;
+    	local X = mob:getXPos();
+		local Y = mob:getYPos();
+		local Z = mob:getZPos();
 
------------------------------------
--- onMobDeath
------------------------------------
+    mob = mob:getID();
+    if (Ix_Aern_PH[mob] ~= nil) then
 
-function onMobDeath(mob, killer)
+        ToD = GetServerVariable("[POP]Ix_Aern");
+        if (ToD <= os.time(t) and GetMobAction(Ix_Aern) == 0) then
+            if (math.random((1),(5)) == 5) then
+                GetMobByID(Ix_Aern):setRespawnTime(GetMobRespawnTime(mob));
+                SetServerVariable("[PH]Ix_Aern", mob);
+				SpawnMob(16921022);
+				GetMobByID(16921022):setPos(X,Y,Z);
+				GetMobByID(16921022):setSpawn(X,Y,Z);
+                DeterMob(mob, true);
+            end
+        end
+    end 
+
+
+
+
 	--[[local VanadielHour = VanadielHour();
 	local posi_drk = GetServerVariable("[POSI]Ix_aern_drk");
 	local ixdrg = GetMobByID(16921022);

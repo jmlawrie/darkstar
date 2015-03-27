@@ -1,7 +1,7 @@
 -----------------------------------
 -- Area: Al'Taieu
 -- MOB: Jailer of Love
--- Author: Scavenge
+-- Author: Warp
 -----------------------------------
 
 require("scripts/globals/missions");
