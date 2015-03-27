@@ -1,15 +1,95 @@
 -----------------------------------
 -- Area: The Garden of Ru'Hmet
--- NPC:  Jailer_of_Fortitude
+-- NPC:  Jailer of Fortitude
 -----------------------------------
+
+require("scripts/globals/missions");
+require("scripts/globals/status");
+require("scripts/globals/magic");
+
+-----------------------------------
+-- onMobInitialize Action
+-----------------------------------
+
+function onMobInitialize(mob)
+end;
 
 -----------------------------------
 -- onMobSpawn Action
 -----------------------------------
 
 function onMobSpawn(mob)
-
+    mob:hideName(false);
+    mob:untargetable(false);
+    mob:AnimationSub(5);
+    --mob:addMod(MOD_UDMGMAGIC, -64)
+    mob:addMod(MOD_UDMGPHYS, -74)
+    mob:SetMobAbilityEnabled(false);
 end;
+
+-----------------------------------
+-- onMobEngaged
+-----------------------------------
+
+function onMobEngaged(mob, killer)
+    mob:hideName(false);
+    mob:untargetable(false);
+    mob:AnimationSub(5);
+    mob:SetMobAbilityEnabled(false);
+end;
+
+-----------------------------------
+-- onMobEngaged
+-----------------------------------
+
+function onMobFight(mob, target)
+local chance = math.random(2,4);
+local delay = mob:getLocalVar("delay");
+    local LastCast = mob:getLocalVar("LAST_CAST");
+    local spell = mob:getLocalVar("COPY_SPELL");
+    if (mob:AnimationSub() == 1) then
+        if (mob:getBattleTime() - LastCast > 30) then
+            mob:setLocalVar("COPY_SPELL", 0);
+            mob:setLocalVar("delay", 0);
+            mob:AnimationSub(0);
+        end
+
+        if (spell > 0 and mob:hasStatusEffect(EFFECT_SILENCE) == false) then
+            if (delay >= 3) then
+                mob:castSpell(spell);
+                mob:setLocalVar("COPY_SPELL", 0);
+                mob:setLocalVar("delay", 0);
+                mob:AnimationSub(0);
+            else
+                mob:setLocalVar("delay", delay+1);
+            end
+        end
+    end
+
+
+    if (mob:getHPP() <= 10) then
+    chance = math.random(1,3);
+
+    elseif (mob:getHPP() <= 33) then
+    chance = math.random(2,3);
+
+    end
+
+    if (mob:getTP() >= 10) then
+        if chance == 2 then
+        mob:useMobAbility(687);
+        mob:setTP(0);
+        elseif ((chance >= 3) and (chance <= 4))  then
+        mob:useMobAbility(1185);
+        mob:setTP(0);
+        
+		
+        end
+    end
+end;
+   
+
+
 
 -----------------------------------
 -- onMobDeath
