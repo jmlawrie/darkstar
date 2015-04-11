@@ -1,0 +1,22 @@
+---------------------------------------------------
+-- Amber Scutum
+-- Increases defense.
+---------------------------------------------------
+require("/scripts/globals/settings");
+require("/scripts/globals/status");
+require("/scripts/globals/monstertpmoves");
+---------------------------------------------------
+
+function OnMobSkillCheck(target,mob,skill)
+	return 0;
+end;
+
+function OnMobWeaponSkill(target, mob, skill)
+	local base = mob:getMainLvl() + 0.06*mob:getMaxHP()*(skill:getTP()/100);
+	local typeEffect = EFFECT_STONESKIN;
+	
+    skill:setMsg(MobBuffMove(mob, typeEffect, base, 0, 300));
+	
+	return typeEffect;
+
+end;
